@@ -391,8 +391,36 @@ function getSpiralMatrix(gridSize) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const originalMatrix = matrix;
+  const rowCount = originalMatrix.length;
+  const colCount = originalMatrix[0].length;
+  const rotatedMatrixClockwise = [];
+
+  for (let i = 0; i < colCount; i += 1) {
+    rotatedMatrixClockwise[i] = [];
+    for (let j = 0; j < rowCount; j += 1) {
+      rotatedMatrixClockwise[i][j] = originalMatrix[rowCount - j - 1][i];
+    }
+  }
+
+  const matrixCounterClockwise = [];
+  for (let i = 0; i < Math.floor(rowCount / 2); i += 1) {
+    for (let j = i; j < rowCount - i - 1; j += 1) {
+      const tmp = originalMatrix[i][j];
+      originalMatrix[i][j] = originalMatrix[rowCount - j - 1][i];
+      originalMatrix[rowCount - j - 1][i] =
+        originalMatrix[rowCount - i - 1][rowCount - j - 1];
+      originalMatrix[rowCount - i - 1][rowCount - j - 1] =
+        originalMatrix[j][rowCount - i - 1];
+      originalMatrix[j][rowCount - i - 1] = tmp;
+    }
+  }
+
+  return {
+    rotatedMatrixClockwise,
+    matrixCounterClockwise,
+  };
 }
 
 /**
