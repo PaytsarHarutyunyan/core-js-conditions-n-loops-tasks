@@ -458,8 +458,34 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(inputString, numOfIterations) {
+  if (inputString.length < 2 || numOfIterations < 1) {
+    return inputString;
+  }
+
+  let modifiedString = inputString;
+
+  for (let iteration = 1; iteration <= numOfIterations; iteration += 1) {
+    let evenChars = '';
+    let oddChars = '';
+
+    for (let index = 0; index < inputString.length; index += 1) {
+      const isEvenIndex = index % 2 === 0;
+      if (isEvenIndex) {
+        evenChars += modifiedString[index];
+      } else {
+        oddChars += modifiedString[index];
+      }
+    }
+
+    modifiedString = evenChars + oddChars;
+
+    if (modifiedString === inputString) {
+      return shuffleChar(inputString, numOfIterations % iteration);
+    }
+  }
+
+  return modifiedString;
 }
 
 /**
@@ -479,8 +505,44 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let tempNumber = number;
+  while (tempNumber > 0) {
+    digits.unshift(tempNumber % 10);
+    tempNumber = Math.floor(tempNumber / 10);
+  }
+
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) {
+    return number;
+  }
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  [digits[i], digits[j]] = [digits[j], digits[i]];
+
+  let left = i + 1;
+  let right = digits.length - 1;
+  while (left < right) {
+    [digits[left], digits[right]] = [digits[right], digits[left]];
+    left += 1;
+    right -= 1;
+  }
+
+  let result = 0;
+  for (let k = 0; k < digits.length; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
