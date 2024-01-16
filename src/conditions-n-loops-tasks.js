@@ -244,8 +244,8 @@ function getIndexOf(str, letter) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(inputNumber, targetDigit) {
+  return getIndexOf(`${inputNumber}`, String(targetDigit)) !== -1;
 }
 
 /**
@@ -261,8 +261,27 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  const { length } = arr;
+
+  for (let i = 1; i < length - 1; i += 1) {
+    let leftSum = 0;
+    let rightSum = 0;
+
+    for (let j = 0; j < i; j += 1) {
+      leftSum += arr[j];
+    }
+
+    for (let k = i + 1; k < length; k += 1) {
+      rightSum += arr[k];
+    }
+
+    if (leftSum === rightSum) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 /**
@@ -286,8 +305,75 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(gridSize) {
+  const spiralMatrix = [];
+
+  for (let i = 0; i < gridSize; i += 1) {
+    spiralMatrix[i] = [];
+    for (let j = 0; j < gridSize; j += 1) {
+      spiralMatrix[i][j] = null;
+    }
+  }
+
+  let currentCol = -1;
+  let currentRow = 0;
+  let isMovingForward = true;
+  let isMovingDown = true;
+  let isRowDirectionActive = true;
+
+  for (let num = 0; num < gridSize * gridSize; num += 1) {
+    if (isRowDirectionActive) {
+      if (isMovingForward) {
+        if (currentCol + 1 >= gridSize) {
+          currentRow += 1;
+          isMovingDown = true;
+          isRowDirectionActive = false;
+        } else if (spiralMatrix[currentRow][currentCol + 1] === null) {
+          currentCol += 1;
+        } else {
+          currentRow += 1;
+          isMovingDown = true;
+          isRowDirectionActive = false;
+        }
+      } else if (currentCol - 1 < 0) {
+        currentRow -= 1;
+        isMovingDown = false;
+        isRowDirectionActive = false;
+      } else if (spiralMatrix[currentRow][currentCol - 1] === null) {
+        currentCol -= 1;
+      } else {
+        currentRow -= 1;
+        isMovingDown = false;
+        isRowDirectionActive = false;
+      }
+    } else if (isMovingDown) {
+      if (currentRow + 1 >= gridSize) {
+        currentCol -= 1;
+        isMovingForward = false;
+        isRowDirectionActive = true;
+      } else if (spiralMatrix[currentRow + 1][currentCol] === null) {
+        currentRow += 1;
+      } else {
+        currentCol -= 1;
+        isMovingForward = false;
+        isRowDirectionActive = true;
+      }
+    } else if (currentRow - 1 < 0) {
+      currentCol += 1;
+      isMovingForward = true;
+      isRowDirectionActive = true;
+    } else if (spiralMatrix[currentRow - 1][currentCol] === null) {
+      currentRow -= 1;
+    } else {
+      currentCol += 1;
+      isMovingForward = true;
+      isRowDirectionActive = true;
+    }
+
+    spiralMatrix[currentRow][currentCol] = num + 1;
+  }
+
+  return spiralMatrix;
 }
 
 /**
